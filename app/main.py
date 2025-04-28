@@ -32,9 +32,13 @@ conf = ConnectionConfig(
 # <br/>
 # <p>Correo electronico: ${message}</p>
 # """
-    
+
+@app.get("/")
+async def read_root():
+    return JSONResponse(status_code=200, content={"message": "ON :D"})
+
 @app.post("/send-email")
-async def read_root(emailBody: EmailSchema) -> JSONResponse:
+async def send_email(emailBody: EmailSchema) -> JSONResponse:
     print("emial???????????????",emailBody.email)
     message = MessageSchema(
         subject="Fastapi-Mail module",
