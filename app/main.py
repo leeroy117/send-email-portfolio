@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from fastapi_mail import ConnectionConfig, FastMail, MessageSchema, MessageType
 from pydantic import BaseModel, EmailStr
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
@@ -26,12 +27,20 @@ conf = ConnectionConfig(
     VALIDATE_CERTS = True
 )
 
-# html = """
-# <h3>Nombre: ${name}</h3>
-# <h3>Email: ${email}</h3>
-# <br/>
-# <p>Correo electronico: ${message}</p>
-# """
+origins = [
+    "https://leeroygarcia.dev",  # o el subdominio donde esté tu frontend
+    "https://www.leeroygarcia.dev",
+    "http://localhost:3000",     # para pruebas locales
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    # allow_origins=origins,           
+    allow_origins=["*"],           
+    allow_credentials=True,
+    allow_methods=["*"],              
+    allow_headers=["*"],              
+)
 
 @app.get("/")
 async def read_root():
